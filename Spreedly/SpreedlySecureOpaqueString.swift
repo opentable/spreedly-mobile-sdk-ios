@@ -48,6 +48,16 @@ class SpreedlySecureOpaqueStringImpl: NSObject, SpreedlySecureOpaqueString {
     internal func internalToString() -> String {
         String(data)
     }
+
+    // ensure that default implementation does not change and expose data
+    override var description: String {
+        return String(format: "%p", self)
+    }
+
+    // ensure that default implementation does not change and expose data
+    override var debugDescription: String {
+        return String(format: "%p", self)
+    }
 }
 
 extension SpreedlySecureOpaqueStringImpl: Encodable {
