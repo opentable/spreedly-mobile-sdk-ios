@@ -84,47 +84,54 @@ public class Transaction: NSObject {
 
 public class SingleTransactionSource {
     private var successHandlers: [(_ transaction: Transaction) -> ()] = []
-    private var errorHandlers: [(_ error: Error) -> ()] = []
+    private var errorHandlers: [(_ error: ClientError) -> ()] = []
+    private let synchronizationQueue = DispatchQueue(label: "Spreedly.transaction.sync.queue", qos: .userInteractive)
 
     private var success: Transaction?
 
-    private var error: Error?
+    private var error: ClientError?
 
-    func subscribe(onSuccess: ((Transaction) -> ())?, onError: ((Error) -> ())?) {
-        if let onSuccess = onSuccess {
-            if let success = success {
-                DispatchQueue.main.async {
-                    onSuccess(success)
+    func subscribe(onSuccess: ((Transaction) -> ())?, onError: ((ClientError) -> ())?) {
+        self.synchronizationQueue.sync {
+            if let onSuccess = onSuccess {
+                if let success = success {
+                    DispatchQueue.main.async {
+                        onSuccess(success)
+                    }
+                } else {
+                    successHandlers.append(onSuccess)
                 }
-            } else {
-                successHandlers.append(onSuccess)
             }
-        }
-        if let onError = onError {
-            if let error = error {
-                DispatchQueue.main.async {
-                    onError(error)
+            if let onError = onError {
+                if let error = error {
+                    DispatchQueue.main.async {
+                        onError(error)
+                    }
+                } else {
+                    errorHandlers.append(onError)
                 }
-            } else {
-                errorHandlers.append(onError)
             }
         }
     }
 
-    func handleSuccess(transaction: Transaction) {
-        self.success = transaction
-        for s in successHandlers {
-            DispatchQueue.main.async {
-                s(transaction)
+    internal func handleSuccess(transaction: Transaction) {
+        self.synchronizationQueue.sync {
+            self.success = transaction
+            for s in successHandlers {
+                DispatchQueue.main.async {
+                    s(transaction)
+                }
             }
         }
     }
 
-    func handleError(error: Error) {
-        self.error = error
-        for e in errorHandlers {
-            DispatchQueue.main.async {
-                e(error)
+    internal func handleError(error: ClientError) {
+        self.synchronizationQueue.sync {
+            self.error = error
+            for e in errorHandlers {
+                DispatchQueue.main.async {
+                    e(error)
+                }
             }
         }
     }
@@ -140,7 +147,7 @@ public class SingleTransaction: NSObject { // swiftlint:disable:this type_name
     }
 
     /// Subscribes a success and error handler for this transaction.
-    @objc public func subscribe(onSuccess: ((Transaction) -> Void)?, onError: ((Error) -> Void)? = nil) {
+    @objc public func subscribe(onSuccess: ((Transaction) -> Void)?, onError: ((ClientError) -> Void)? = nil) {
         source.subscribe(onSuccess: onSuccess, onError: onError)
     }
 }

@@ -55,4 +55,5 @@ public enum ClientError: Int, Error {
     case parseError
     case invalidRequestData
     case encodingError
+    case networkError
 }

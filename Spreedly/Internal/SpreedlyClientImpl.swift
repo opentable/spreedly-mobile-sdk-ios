@@ -85,7 +85,7 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = try? request.encodeJson()
             guard urlRequest.httpBody != nil else {
-                source.handleError(error: ClientError.invalidRequestData)
+                source.handleError(error: .invalidRequestData)
                 return
             }
             self.process(source: source, request: urlRequest)
@@ -101,7 +101,7 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
             let authenticated = info.retained ?? false
 
             guard var request = try? info.toRequestJson() else {
-                source.handleError(error: ClientError.invalidRequestData)
+                source.handleError(error: .invalidRequestData)
                 return
             }
             let url: URL
@@ -115,13 +115,13 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
             do {
                 request["platform-meta"] = try self.getPlatformDataLocal()
             } catch {
-                source.handleError(error: error)
+                source.handleError(error: .encodingError)
             }
             var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = "POST"
             urlRequest.httpBody = try? request.encodeJson()
             guard urlRequest.httpBody != nil else {
-                source.handleError(error: ClientError.invalidRequestData)
+                source.handleError(error: .invalidRequestData)
                 return
             }
 
@@ -144,23 +144,28 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
                 if let transaction = transaction {
                     source.handleSuccess(transaction: transaction)
                 } else {
-                    source.handleError(error: ClientError.parseError)
+                    source.handleError(error: .parseError)
                 }
                 return;
             }
             if let error = error {
-                source.handleError(error: error)
+                source.handleError(error: .networkError)
                 return;
             }
-            source.handleError(error: ClientError.invalidRequestData)
+            source.handleError(error: .invalidRequestData)
         }.resume()
     }
     
     func getPlatformDataLocal() throws -> String {
-        try SpreedlyClientImpl.getPlatformData()
+        if let data = Self.platformData {
+            return data
+        } else {
+            return try SpreedlyClientImpl.getPlatformData()
+        }
     }
-    
-    static func getPlatformData() throws -> String {
+
+    private static var platformData: String? = try? SpreedlyClientImpl.getPlatformData() // static var is lazy
+    private static func getPlatformData() throws -> String {
         let proc = ProcessInfo()
 #if (arch(i386) || arch(x86_64))
   let arch = "x86"
