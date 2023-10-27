@@ -21,7 +21,7 @@ extension Data {
 
 extension Dictionary where Key == String, Value == Any {
 
-    func encodeJson() throws -> Data {
+    func spr_encodeJson() throws -> Data {
         try JSONSerialization.data(withJSONObject: self)
     }
 

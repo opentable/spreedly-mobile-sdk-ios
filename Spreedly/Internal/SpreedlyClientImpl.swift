@@ -83,7 +83,7 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
 
             var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = "POST"
-            urlRequest.httpBody = try? request.encodeJson()
+            urlRequest.httpBody = try? request.spr_encodeJson()
             guard urlRequest.httpBody != nil else {
                 source.handleError(error: .invalidRequestData)
                 return
@@ -119,7 +119,7 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
             }
             var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = "POST"
-            urlRequest.httpBody = try? request.encodeJson()
+            urlRequest.httpBody = try? request.spr_encodeJson()
             guard urlRequest.httpBody != nil else {
                 source.handleError(error: .invalidRequestData)
                 return
@@ -188,7 +188,7 @@ class SpreedlyClientImpl: NSObject, SpreedlyClient {
             ] as [String : Any],
         ] as [String : Any]
         NSLog("\(data)")
-        guard let encodedData = try? data.encodeJson().base64EncodedString(options: [])
+        guard let encodedData = try? data.spr_encodeJson().base64EncodedString(options: [])
         else { throw ClientError.encodingError }
 
         return encodedData
