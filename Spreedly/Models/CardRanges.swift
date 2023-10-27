@@ -40,9 +40,10 @@ class CardRanges {
     ]
 
     static let dinersClub16Digit = [
-        300...305,
+        300...305, // per this site, these are technically part of 14 digit. https://www.bincodes.com/bin-list/
         380...389
     ]
+    // there are 2 15 digit values which currently fail for Diner's club: 2014, 2149
 
     static let dinersClub14Digit = [
         360...369

@@ -147,7 +147,12 @@ public class SingleTransaction: NSObject { // swiftlint:disable:this type_name
     }
 
     /// Subscribes a success and error handler for this transaction.
-    @objc public func subscribe(onSuccess: ((Transaction) -> Void)?, onError: ((ClientError) -> Void)? = nil) {
+    public func subscribe(onSuccess: ((Transaction) -> Void)?, onError: ((ClientError) -> Void)? = nil) {
         source.subscribe(onSuccess: onSuccess, onError: onError)
     }
+
+    @objc public func subscribe(onSuccess: ((Transaction) -> Void)?, onError: ((Error) -> Void)? = nil) {
+        source.subscribe(onSuccess: onSuccess, onError: onError)
+    }
+
 }
