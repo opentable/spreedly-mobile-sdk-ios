@@ -20,8 +20,4 @@ public class ClientFactory: NSObject {
     public static func _objCCreate(with config: ClientConfiguration) -> _ObjCClient { // swiftlint:disable:this identifier_name line_length
         SpreedlyClientImpl(with: config)
     }
-    
-    public static func getPlatformData() -> String {
-        SpreedlyClientImpl.getPlatformData()
-    }
 }

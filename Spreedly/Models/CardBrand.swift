@@ -72,125 +72,125 @@ let brandData: [CardBrand: BrandParameters] = [
             max: 16,
             spreedlyType: .alelo,
             detect: {
-                $0.bin(length: 6, in: CardRanges.alelo)
+                $0.isValidBIN(length: 6, in: CardRanges.alelo)
             }
     ),
     .amex: BrandParameters(
             max: 15,
             spreedlyType: .amex,
             detect: {
-                $0.bin(beginning: CardRanges.amex)
+                $0.isValidBIN(beginning: CardRanges.amex)
             }
     ),
     .cabal: BrandParameters(
             max: 16,
             spreedlyType: .cabal,
             detect: {
-                $0.bin(length: 8, in: CardRanges.cabal)
+                $0.isValidBIN(length: 8, in: CardRanges.cabal)
             }
     ),
     .carnet: BrandParameters(
             max: 16,
             spreedlyType: .carnet,
             detect: {
-                $0.bin(length: 6, in: CardRanges.carnet) || $0.bin(beginning: CardRanges.carnetBins)
+                $0.isValidBIN(length: 6, in: CardRanges.carnet) || $0.isValidBIN(beginning: CardRanges.carnetBins)
             }
     ),
     .dankort: BrandParameters(
             max: 16,
             spreedlyType: .dankort,
             detect: {
-                $0.bin(beginning: CardRanges.dankort)
+                $0.isValidBIN(beginning: CardRanges.dankort)
             }
     ),
     .dinersClub: BrandParameters(
             max: 19,
             spreedlyType: .dinersClub,
             detect: {
-                $0.bin(length: 3, in: CardRanges.dinersClub)
+                $0.isValidBIN(length: 3, in: CardRanges.dinersClub)
             }
     ),
     .discover: BrandParameters(
             max: 19,
             spreedlyType: .discover,
             detect: {
-                $0.bin(length: 6, in: CardRanges.discover)
+                $0.isValidBIN(length: 6, in: CardRanges.discover)
             }
     ),
     .elo: BrandParameters(
             max: 16,
             spreedlyType: .elo,
             detect: {
-                $0.bin(length: 6, in: CardRanges.elo)
+                $0.isValidBIN(length: 6, in: CardRanges.elo)
             }
     ),
     .forbrubsforeningen: BrandParameters(
             max: 16,
             spreedlyType: .forbrubsforeningen,
             detect: {
-                $0.bin(beginning: CardRanges.forbrubsforeningen)
+                $0.isValidBIN(beginning: CardRanges.forbrubsforeningen)
             }
     ),
     .jcb: BrandParameters(
             max: 16,
             spreedlyType: .jcb,
             detect: {
-                $0.bin(length: 4, in: CardRanges.jcb)
+                $0.isValidBIN(length: 4, in: CardRanges.jcb)
             }
     ),
     .maestro: BrandParameters(
             max: 19,
             spreedlyType: .maestro,
             detect: {
-                $0.bin(length: 6, in: CardRanges.maestro)
+                $0.isValidBIN(length: 6, in: CardRanges.maestro)
             }
     ),
     .mastercard: BrandParameters(
             max: 16,
             spreedlyType: .mastercard,
             detect: {
-                $0.bin(length: 6, in: CardRanges.mastercard)
+                $0.isValidBIN(length: 6, in: CardRanges.mastercard)
             }
     ),
     .naranja: BrandParameters(
             max: 16,
             spreedlyType: .naranja,
             detect: {
-                $0.bin(length: 6, in: CardRanges.naranja)
+                $0.isValidBIN(length: 6, in: CardRanges.naranja)
             }
     ),
     .sodexo: BrandParameters(
             max: 16,
             spreedlyType: .sodexo,
             detect: {
-                $0.bin(beginning: CardRanges.sodexo)
+                $0.isValidBIN(beginning: CardRanges.sodexo)
             }
     ),
     .unionpay: BrandParameters(
             max: 19,
             spreedlyType: .unionpay,
             detect: {
-                $0.bin(length: 8, in: CardRanges.unionPay)
+                $0.isValidBIN(length: 8, in: CardRanges.unionPay)
             }
     ),
     .visa: BrandParameters(
             max: 19,
             spreedlyType: .visa,
             detect: {
-                $0.bin(beginning: CardRanges.visa)
+                $0.isValidBIN(beginning: CardRanges.visa)
             }
     ),
     .vr: BrandParameters(
             max: 16,
             spreedlyType: .vr,
             detect: {
-                $0.bin(beginning: CardRanges.vr)
+                $0.isValidBIN(beginning: CardRanges.vr)
             }
     )
 ]
 
 fileprivate extension String {
-    func bin(length: Int, in binRanges: [ClosedRange<Int>]) -> Bool {
+    func isValidBIN(length: Int, in binRanges: [ClosedRange<Int>]) -> Bool {
         let cleaned = self.onlyNumbers()
         guard cleaned.count >= length,
               let bin = Int(cleaned.prefix(length)) else {
@@ -201,7 +201,7 @@ fileprivate extension String {
         }
     }
 
-    func bin(beginning bins: [String]) -> Bool {
+    func isValidBIN(beginning bins: [String]) -> Bool {
         let cleaned = self.onlyNumbers()
 
         return bins.contains(where: { bin in

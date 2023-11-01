@@ -40,9 +40,10 @@ class CardRanges {
     ]
 
     static let dinersClub16Digit = [
-        300...305,
+        300...305, // per this site, these are technically part of 14 digit. https://www.bincodes.com/bin-list/
         380...389
     ]
+    // there are 2 15 digit values which currently fail for Diner's club: 2014, 2149
 
     static let dinersClub14Digit = [
         360...369
@@ -59,17 +60,17 @@ class CardRanges {
 
     // http://www.barclaycard.co.uk/business/files/bin_rules.pdf
     static let electron = [
-        400115.range,
+        400115.spr_singleDigitRange,
         400837...400839,
         412921...412923,
-        417935.range,
+        417935.spr_singleDigitRange,
         419740...419741,
         419773...419775,
-        424519.range,
+        424519.spr_singleDigitRange,
         424962...424963,
-        437860.range,
-        444000.range,
-        459472.range,
+        437860.spr_singleDigitRange,
+        444000.spr_singleDigitRange,
+        459472.spr_singleDigitRange,
         484406...484411,
         484413...484414,
         484418...484418,
@@ -101,8 +102,8 @@ class CardRanges {
 
     // https://www.mastercard.us/content/dam/mccom/global/documents/mastercard-rules.pdf, page 73
     static let maestro = [
-        500033.range,
-        581149.range,
+        500033.spr_singleDigitRange,
+        581149.spr_singleDigitRange,
         561200...561269,
         561271...561299,
         561320...561356,
@@ -162,7 +163,7 @@ class CardRanges {
 }
 
 extension Int {
-    var range: ClosedRange<Int> {
+    var spr_singleDigitRange: ClosedRange<Int> {
         self...self
     }
 }

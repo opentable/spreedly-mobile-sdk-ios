@@ -58,6 +58,8 @@ public enum _ObjCPaymentMethodType: Int { // swiftlint:disable:this type_name
     }
 }
 
+/// definitions of the error keys can be found here: https://docs.spreedly.com/reference/iframe/v1/events/#arguments
+/// but attribute values are not listed
 @objc(SPRError)
 public class SpreedlyError: NSObject {
     @objc public let key: String
